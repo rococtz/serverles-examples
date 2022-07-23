@@ -1,0 +1,26 @@
+service: test-dql
+frameworkVersion: '3'
+	
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
+
+functions:
+  the-fun-func:
+    handler: handler.hello
+    maximumEventAge: 60
+    maximumRetryAttempts: 1
+    destinations:
+      onFailure:
+        type: sqs
+        arn: !GetAtt MultiWowserQueue.Arn
+    events:
+      - eventBridge:
+          eventBus: my-bus-${self:provider.stage}
+          pattern:
+            source:
+              - wtf.ffs
+
+resources:
+  - ${file(resources/MultiWowserQueue.yml)}

@@ -1,0 +1,5 @@
+Resources:
+  MultiWowserQueue:
+    Type: AWS::SQS::Queue
+    Properties: 
+      QueueName: 'MultiWowserQueue-${self:provider.stage}'
